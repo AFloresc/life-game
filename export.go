@@ -22,7 +22,15 @@ func ExportToHTML(frames []*Grid, filename string) error {
   .dead { background: white; }
 </style></head><body>`)
 
+	// Contenedor y controles
 	fmt.Fprintln(f, "<h2>Juego de la Vida</h2><div id='grid'></div>")
+	fmt.Fprintln(f, `<div style="margin-top:20px;">
+  <button onclick="togglePlay()">⏯️ Pausar/Reanudar</button>
+  <button onclick="next()">⏭️ Siguiente</button>
+  <label>Velocidad: <input type="range" min="100" max="1000" step="100" value="300" onchange="setSpeed(this.value)"> <span id="speedLabel">300ms</span></label>
+</div>`)
+
+	// Inicio del script
 	fmt.Fprintln(f, "<script>")
 	fmt.Fprintln(f, "const frames = [")
 
@@ -55,7 +63,7 @@ func ExportToHTML(frames []*Grid, filename string) error {
 	}
 	fmt.Fprintln(f, "];")
 
-	// JavaScript para animación
+	// JavaScript interactivo
 	fmt.Fprintf(f, `
 const width = %d;
 const height = %d;
@@ -69,6 +77,10 @@ for (let i = 0; i < width * height; i++) {
 }
 
 let generation = 0;
+let playing = true;
+let interval = 300;
+let timer = setInterval(next, interval);
+
 function render(frame) {
   const cells = grid.children;
   for (let y = 0; y < height; y++) {
@@ -83,7 +95,24 @@ function next() {
   render(frames[generation]);
   generation = (generation + 1) %% frames.length;
 }
-setInterval(next, 300);
+
+function togglePlay() {
+  playing = !playing;
+  if (playing) {
+    timer = setInterval(next, interval);
+  } else {
+    clearInterval(timer);
+  }
+}
+
+function setSpeed(ms) {
+  interval = parseInt(ms);
+  document.getElementById("speedLabel").textContent = ms + "ms";
+  if (playing) {
+    clearInterval(timer);
+    timer = setInterval(next, interval);
+  }
+}
 </script></body></html>
 `, frames[0].Width, frames[0].Height)
 
