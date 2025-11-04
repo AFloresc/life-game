@@ -27,6 +27,7 @@ func ExportToHTML(frames []*Grid, filename string) error {
 	fmt.Fprintln(f, `<div style="margin-top:20px;">
   <button onclick="togglePlay()">⏯️ Pausar/Reanudar</button>
   <button onclick="next()">⏭️ Siguiente</button>
+  <button onclick="reset()">🔄 Reiniciar</button>
   <label>Velocidad: <input type="range" min="100" max="1000" step="100" value="300" onchange="setSpeed(this.value)"> <span id="speedLabel">300ms</span></label>
 </div>`)
 
@@ -63,7 +64,7 @@ func ExportToHTML(frames []*Grid, filename string) error {
 	}
 	fmt.Fprintln(f, "];")
 
-	// JavaScript interactivo
+	// JavaScript interactivo con reinicio
 	fmt.Fprintf(f, `
 const width = %d;
 const height = %d;
@@ -112,6 +113,11 @@ function setSpeed(ms) {
     clearInterval(timer);
     timer = setInterval(next, interval);
   }
+}
+
+function reset() {
+  generation = 0;
+  render(frames[generation]);
 }
 </script></body></html>
 `, frames[0].Width, frames[0].Height)
