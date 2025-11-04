@@ -33,6 +33,7 @@ func main() {
 
 	for i := 0; i < 20; i++ {
 		PrintGrid(grid)
+		frames = append(frames, grid.Clone()) // ← aquí guardamos la copia
 		grid = NextGeneration(grid)
 		time.Sleep(300 * time.Millisecond)
 	}

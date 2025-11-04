@@ -28,3 +28,13 @@ func (g *Grid) IsAlive(x, y int) bool {
 	}
 	return g.Cells[y][x]
 }
+
+func (g *Grid) Clone() *Grid {
+	clone := NewGrid(g.Width, g.Height)
+	for y := 0; y < g.Height; y++ {
+		for x := 0; x < g.Width; x++ {
+			clone.Cells[y][x] = g.Cells[y][x]
+		}
+	}
+	return clone
+}
