@@ -16,7 +16,7 @@ func ExportToHTML(frames []*Grid, filename string) error {
 	fmt.Fprintln(f, "<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Juego de la Vida</title>")
 	fmt.Fprintln(f, `<style>
   body { font-family: sans-serif; text-align: center; background: white; }
-  #grid { display: grid; margin: auto; }
+  #grid { display: grid; justify-content: center; margin: auto; }
   .cell { width: 10px; height: 10px; }
   .alive { background: black; }
   .dead { background: white; }
